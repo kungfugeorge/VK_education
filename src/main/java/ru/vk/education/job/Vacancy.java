@@ -19,14 +19,6 @@ public class Vacancy {
         System.out.println(vacancy + " at " + companyName);
     }
 
-    public String getVacancy() {
-        return vacancy;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
     public Set<String> getTags() {
         return tags;
     }
@@ -35,3 +27,4 @@ public class Vacancy {
         return expNeeded;
     }
 }
+
