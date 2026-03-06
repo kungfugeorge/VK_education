@@ -26,5 +26,9 @@ public class Vacancy {
     public int getExpNeeded() {
         return expNeeded;
     }
+
+    public String getVacancy() {
+        return vacancy;
+    }
 }
 

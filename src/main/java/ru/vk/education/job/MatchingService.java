@@ -7,11 +7,29 @@ public class MatchingService {
     private List<Vacancy> vacancies = new ArrayList<>();
 
     public void addUser(User user) {
-        users.add(user);
+        boolean isExists = false;
+        for (User userElem : users) {
+            if (userElem.getName().equals(user.getName())) {
+                isExists = true;
+                break;
+            }
+        }
+        if (!isExists) {
+            users.add(user);
+        }
     }
 
     public void addVacancy(Vacancy vacancy){
-        vacancies.add(vacancy);
+        boolean isExists = false;
+        for (Vacancy vacElem : vacancies) {
+            if (vacElem.getVacancy().equals(vacancy.getVacancy())) {
+                isExists = true;
+                break;
+            }
+        }
+        if (!isExists) {
+            vacancies.add(vacancy);
+        }
     }
 
     public void showUsers() {
