@@ -15,6 +15,9 @@ public class Vacancy {
         this.expNeeded = expNeeded;
     }
 
+    public String getString() {
+        return vacancy + " at " + companyName;
+    }
     public void print() {
         System.out.println(vacancy + " at " + companyName);
     }

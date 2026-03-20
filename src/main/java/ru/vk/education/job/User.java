@@ -13,6 +13,19 @@ public class User {
         this.exp = exp;
     }
 
+    public String getString() {
+        StringBuilder sb = new StringBuilder();
+        for (String elem : skills) {
+            sb.append(elem);
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+
+        String skillsString = sb.toString();
+
+        return name + " " + skillsString + " " + exp;
+    }
+
     public void print() {
         StringBuilder sb = new StringBuilder();
         for (String elem : skills) {

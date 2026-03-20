@@ -5,6 +5,8 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         MatchingService matchingService = new MatchingService();
+        FileService fs = new FileService();
+        matchingService = fs.init();
         Scanner scanner = new Scanner(System.in);
         boolean isExit = false;
         while (!isExit) {
@@ -13,18 +15,33 @@ public class Main {
             switch (inputArray[0]) {
                 case ("user") :
                     matchingService = addUser(inputArray, matchingService);
+                    Optional<User> user = matchingService.getLastUser();
+                    if (user.isPresent()) {
+                        fs.saveCommand(input);
+                    }
                     break;
                 case ("job") :
                     matchingService = addVacancy(inputArray, matchingService);
+                    Optional<Vacancy> vacancy = matchingService.getLastVacancy();
+                    if (vacancy.isPresent()) {
+                        fs.saveCommand(input);
+                    }
                     break;
                 case ("user-list") :
                     matchingService.showUsers();
+                    fs.saveCommand("user-list");
                     break;
                 case ("job-list") :
                     matchingService.showVacancies();
+                    fs.saveCommand("job-list");
                     break;
                 case ("suggest") :
                     matchingService.findMatches(inputArray[1]);
+                    fs.saveCommand("suggest " + inputArray[1]);
+                    break;
+                case ("history") :
+                    fs.printFile();
+                    fs.saveCommand("history");
                     break;
                 case ("exit") :
                     isExit = true;

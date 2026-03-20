@@ -6,6 +6,14 @@ public class MatchingService {
     private List<User> users = new ArrayList<>();
     private List<Vacancy> vacancies = new ArrayList<>();
 
+    public Optional<User> getLastUser() {
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(users.size() - 1));
+    }
+
+    public Optional<Vacancy> getLastVacancy() {
+        return vacancies.isEmpty() ? Optional.empty() : Optional.of(vacancies.get(vacancies.size() - 1));
+    }
+
     public void addUser(User user) {
         boolean isExists = false;
         for (User userElem : users) {
