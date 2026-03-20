@@ -10,12 +10,12 @@ public class FileService {
     File file;
 
     public FileService() {
-        this.file = new File("src/main/resources/commands.txt");
+        this.file = new File("commands.txt");
         if (!file.exists()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                System.out.println("Ошибка создания файла");
+//                System.out.println("Ошибка создания файла");
             }
         } else {
             init();
@@ -29,7 +29,7 @@ public class FileService {
             String line = null;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
-                if (line.startsWith("user")) {
+                if (line.startsWith("user ")) {
                     String[] inputArray = line.split(" ");
                     Set<String> skillsSet = new HashSet<>();
                     int exp = 0;
@@ -49,7 +49,7 @@ public class FileService {
                     ms.addUser(user);
 
                 }
-                if (line.startsWith("job")) {
+                if (line.startsWith("job ")) {
                     line = line.trim();
                     String[] inputArray = line.split(" ");
                     String vacancyName = inputArray[1];
@@ -77,7 +77,7 @@ public class FileService {
                 }
             }
         } catch (IOException ex) {
-            System.out.println("Ошибка чтения из файла");
+//            System.out.println("Ошибка чтения из файла");
         }
         return ms;
     }
@@ -87,7 +87,7 @@ public class FileService {
             fileWriter.write(str);
             fileWriter.append("\n");
         } catch (IOException io) {
-            System.out.println("Ошибка создания filewriter");
+//            System.out.println("Ошибка создания filewriter");
         }
     }
 
@@ -99,7 +99,7 @@ public class FileService {
                 System.out.println(line);
             }
         } catch (IOException ex) {
-            System.out.println("Ошибка чтения из файла");
+//            System.out.println("Ошибка чтения из файла");
         }
     }
 }
