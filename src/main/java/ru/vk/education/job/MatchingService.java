@@ -3,8 +3,8 @@ package ru.vk.education.job;
 import java.util.*;
 
 public class MatchingService {
-    private List<User> users = new ArrayList<>();
-    private List<Vacancy> vacancies = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
+    private final List<Vacancy> vacancies = new ArrayList<>();
 
     public Optional<User> getLastUser() {
         return users.isEmpty() ? Optional.empty() : Optional.of(users.get(users.size() - 1));
@@ -14,7 +14,23 @@ public class MatchingService {
         return vacancies.isEmpty() ? Optional.empty() : Optional.of(vacancies.get(vacancies.size() - 1));
     }
 
-    public void addUser(User user) {
+    public void addUser(String[] inputArray) {
+        Set<String> skillsSet = new HashSet<>();
+        int exp = 0;
+        String name = inputArray[1];
+        for (String elem : inputArray) {
+            if (elem.startsWith("--skills=")) {
+                String skills = elem.substring(9);
+                String[] skillSArray = skills.split(",");
+                skillsSet.addAll(Arrays.asList(skillSArray));
+            }
+            if (elem.startsWith("--exp=")) {
+                String expNumber = elem.substring(6);
+                exp = Integer.parseInt(expNumber);
+            }
+        }
+        User user = new User(name, skillsSet, exp);
+
         boolean isExists = false;
         for (User userElem : users) {
             if (userElem.getName().equals(user.getName())) {
@@ -27,7 +43,29 @@ public class MatchingService {
         }
     }
 
-    public void addVacancy(Vacancy vacancy){
+    public void addVacancy(String[] inputArray) {
+        String vacancyName = inputArray[1];
+        String companyName = null;
+        Set<String> tagsSet = new HashSet<>();
+        int expNeeded = 0;
+
+        for (String elem : inputArray) {
+            if (elem.startsWith("--company=")) {
+                companyName = elem.substring(10);
+            }
+            if (elem.startsWith("--tags=")) {
+                String tags = elem.substring(7);
+                String[] tagsArray = tags.split(",");
+                tagsSet.addAll(Arrays.asList(tagsArray));
+            }
+            if (elem.startsWith("--exp=")) {
+                String expNumber = elem.substring(6);
+                expNeeded = Integer.parseInt(expNumber);
+            }
+        }
+
+        Vacancy vacancy = new Vacancy(vacancyName, companyName, tagsSet, expNeeded);
+
         boolean isExists = false;
         for (Vacancy vacElem : vacancies) {
             if (vacElem.getVacancy().equals(vacancy.getVacancy())) {
@@ -67,21 +105,7 @@ public class MatchingService {
                 for (Vacancy vacElem : vacancies) {
                     if (vacElem == null) continue;
 
-                    Set<String> currentVacancyTags = vacElem.getTags();
-                    if (currentVacancyTags == null) currentVacancyTags = new HashSet<>();
-
-                    int requiredExp = vacElem.getExpNeeded();
-                    int matchCount = 0;
-
-                    for (String skill : currentUserSkills) {
-                        if (skill != null && currentVacancyTags.contains(skill)) {
-                            matchCount++;
-                        }
-                    }
-
-                    if (userExp < requiredExp) {
-                        matchCount = matchCount / 2;
-                    }
+                    int matchCount = getMatchCount(vacElem, currentUserSkills, userExp);
 
                     if (matchCount > 0) {
                         vacanciesRating.put(vacElem, matchCount);
@@ -105,12 +129,31 @@ public class MatchingService {
             return Integer.compare(score2, score1);
         });
 
-        if (result.size() > 0) {
+        if (!result.isEmpty()) {
             result.get(0).print();
         }
         if (result.size() > 1) {
             result.get(1).print();
         }
+    }
+
+    private static int getMatchCount(Vacancy vacElem, Set<String> currentUserSkills, int userExp) {
+        Set<String> currentVacancyTags = vacElem.getTags();
+        if (currentVacancyTags == null) currentVacancyTags = new HashSet<>();
+
+        int requiredExp = vacElem.getExpNeeded();
+        int matchCount = 0;
+
+        for (String skill : currentUserSkills) {
+            if (skill != null && currentVacancyTags.contains(skill)) {
+                matchCount++;
+            }
+        }
+
+        if (userExp < requiredExp) {
+            matchCount = matchCount / 2;
+        }
+        return matchCount;
     }
 }
 
