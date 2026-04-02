@@ -13,15 +13,12 @@ stat --exp 0
 user-list
 suggest alice
 suggest bob
-job Backend_Dev1 --company=VK --tags=java,backend,linux --exp=5
-job Backend_Dev2 --company=VK --tags=java,backend,linux --exp=7
-job Backend_Dev3 --company=VK --tags=java,backend,linux --exp=10
 suggest alice
 suggest bob
 user-list
-job PythonDev1 --company=VK --tags=python --exp=5
-job PythonDev2 --company=VK --tags=python --exp=7
-job PythonDev3 --company=VK --tags=python --exp=10
+job Python_Dev --company=Google --tags=python --exp=1
+job Front_Dev --company=Google --tags=python --exp=1
+job Devops --company=VK --tags=docker --exp=1
 suggest fett
 user-list
 job-list
@@ -32,3 +29,17 @@ stat --match 1
 stat --match 3
 stat --top-skills 3
 stat --top-skills 100
+job-list
+stat --exp 11
+stat --exp 1
+job-list
+job-list
+stat --exp 11
+stat --exp 0
+
+stat --exp 11
+job Front_Dev --company=Google--tags=python --exp=1
+job-list
+job-list
+stat --exp=11
+stat --exp 1

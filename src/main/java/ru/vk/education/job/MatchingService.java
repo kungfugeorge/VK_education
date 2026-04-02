@@ -204,13 +204,14 @@ public class MatchingService {
 
                 int matchCount = getMatchCount(vacElem, currentUserSkills, userExp);
 
-                if (matchCount >= n) {
+                if (matchCount > n) {
                     matchedUsers.add(userElem);
                 }
             }
         }
         matchedUsers.stream().sorted(Comparator.comparing(User::getName)).forEach(User::print);
     }
+
 
     private void printExp(int n) {
         List<Vacancy> selectedVacancies = new ArrayList<>();
@@ -220,14 +221,8 @@ public class MatchingService {
             }
         }
         if (!selectedVacancies.isEmpty()) {
-            List<Vacancy> result = new ArrayList<>(selectedVacancies);
-            result.sort((v1, v2) -> {
-                int score1 = v1.getExpNeeded();
-                int score2 = v2.getExpNeeded();
-                return Integer.compare(score2, score1);
-            });
-            result.sort(Comparator.comparing(Vacancy::getVacancy));
-            result.forEach(Vacancy::print);
+            selectedVacancies.sort(Comparator.comparing(v -> v.getString().trim()));
+            selectedVacancies.forEach(Vacancy::print);
         }
     }
 }

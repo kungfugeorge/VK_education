@@ -18,6 +18,7 @@ public class Vacancy {
     public String getString() {
         return vacancy + " at " + companyName;
     }
+
     public void print() {
         System.out.println(vacancy + " at " + companyName);
     }
@@ -34,4 +35,3 @@ public class Vacancy {
         return vacancy;
     }
 }
-
