@@ -155,5 +155,79 @@ public class MatchingService {
         }
         return matchCount;
     }
-}
 
+    public void printStat(String[] inputArray) {
+        switch (inputArray[1].trim()) {
+            case ("--exp"):
+                printExp(Integer.parseInt(inputArray[2].trim()));
+                break;
+            case ("--match"):
+                printMatches(Integer.parseInt(inputArray[2].trim()));
+                break;
+            case ("--top-skills"):
+                printSkills(Integer.parseInt(inputArray[2].trim()));
+                break;
+        }
+    }
+
+
+    private void printSkills(int n) {
+        Map<String, Integer> topSkills = new HashMap<>();
+        for (User user : users) {
+            Set<String> userSkills = user.getSkills();
+            for (String skill : userSkills) {
+                if (topSkills.containsKey(skill)) {
+                    topSkills.compute(skill, (k, current) -> current + 1);
+                } else {
+                    topSkills.put(skill, 1);
+                }
+            }
+        }
+
+        topSkills.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(n)
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry -> System.out.println(entry.getKey()));
+    }
+
+    private void printMatches(int n) {
+        Set<User> matchedUsers = new HashSet<>();
+        for (User userElem : users) {
+            Set<String> currentUserSkills = userElem.getSkills();
+            if (currentUserSkills == null) currentUserSkills = new HashSet<>();
+
+            int userExp = userElem.getExp();
+
+            for (Vacancy vacElem : vacancies) {
+                if (vacElem == null) continue;
+
+                int matchCount = getMatchCount(vacElem, currentUserSkills, userExp);
+
+                if (matchCount >= n) {
+                    matchedUsers.add(userElem);
+                }
+            }
+        }
+        matchedUsers.stream().sorted(Comparator.comparing(User::getName)).forEach(User::print);
+    }
+
+    private void printExp(int n) {
+        List<Vacancy> selectedVacancies = new ArrayList<>();
+        for (Vacancy vacancy : vacancies) {
+            if (vacancy.getExpNeeded() >= n) {
+                selectedVacancies.add(vacancy);
+            }
+        }
+        if (!selectedVacancies.isEmpty()) {
+            List<Vacancy> result = new ArrayList<>(selectedVacancies);
+            result.sort((v1, v2) -> {
+                int score1 = v1.getExpNeeded();
+                int score2 = v2.getExpNeeded();
+                return Integer.compare(score2, score1);
+            });
+            result.sort(Comparator.comparing(Vacancy::getVacancy));
+            result.forEach(Vacancy::print);
+        }
+    }
+}

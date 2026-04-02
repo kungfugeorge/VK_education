@@ -42,6 +42,10 @@ public class Main {
                     fs.printFile();
                     fs.saveCommand("history");
                     break;
+                case ("stat") :
+                    matchingService.printStat(inputArray);
+                    fs.saveCommand(input);
+                    break;
                 case ("exit") :
                     isExit = true;
                     break;
